@@ -32,7 +32,8 @@ git clone https://github.com/morenos96/StarSystemTravelTimeService.git
 
 cd StarSystemTravelTimeService
 
-mvnw clean install -DskipTests # remove -DskipTests if you want to execute the tests
+(remove -DskipTests if you want to execute the tests)
+mvnw clean install -DskipTests 
 
 docker-compose up -d
 
