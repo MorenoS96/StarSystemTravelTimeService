@@ -1,27 +1,13 @@
-FROM maven:3.8.4-openjdk-23-slim AS build
+# syntax=docker/dockerfile:1
+
+FROM eclipse-temurin:17-jdk-jammy
+
 WORKDIR /app
 
-# Copy the Maven project file
-COPY pom.xml .
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:resolve
 
-# Download dependencies (this step can be cached if the pom.xml file hasn't changed)
-RUN mvn dependency:go-offline
+COPY src ./src
 
-# Copy the application source code
-COPY src src
-
-# Build the application
-RUN mvn package
-
-# Use a smaller base image for the runtime
-FROM openjdk:23-slim
-WORKDIR /app
-
-# Copy the JAR file from the build stage to the runtime image
-COPY --from=build /app/target/StarSystemTravelTimeService-0.0.1-SNAPSHOT.jar .
-
-# Expose port 8080
-EXPOSE 8080
-
-# The command to run the application when the container starts
-CMD ["java", "-jar", "StarSystemTravelTimeService-0.0.1-SNAPSHOT.jar"]
+CMD ["./mvnw", "spring-boot:run"]
