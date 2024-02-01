@@ -1,0 +1,32 @@
+version: '3'
+services:
+  neo4j:
+    image: neo4j:5.16.0
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - ./src/main/resources/neo4j/seed:/var/lib/neo4j/import
+      - ./src/main/resources/neo4j/conf/apoc.conf:/var/lib/neo4j/conf/apoc.conf
+      - ./src/main/resources/neo4j/plugins:/var/lib/neo4j/plugins
+    healthcheck:
+      test: cypher-shell --username neo4j --password password 'MATCH (n) RETURN COUNT(n);' # Checks if neo4j server is up and running
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=bolt://neo4j:7687
+      - SPRING_DATASOURCE_USERNAME=neo4j
+      - SPRING_DATASOURCE_PASSWORD=password

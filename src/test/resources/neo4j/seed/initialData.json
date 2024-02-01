@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {"label": "StarSystem", "properties": {"name": "Solar System",
+      "id": "Solar System"
+    }},
+    {"label": "StarSystem", "properties": {"name": "Alpha Centauri",
+      "id": "Alpha Centauri"
+    }},
+    {"label": "StarSystem", "properties": {"name": "Sirius",
+      "id": "Sirius"
+    }},
+    {"label": "StarSystem", "properties": {"name": "Betelgeuse",
+      "id": "Betelgeuse"
+    }},
+    {"label": "StarSystem", "properties": {"name": "Vega",
+      "id": "Vega"
+    }}
+  ],
+  "relationships": [
+    {
+      "type": "TRAVEL_TO", "start": "Solar System", "end": "Alpha Centauri", "properties": {"travelTimeInHours": 5,"startSystemId": "Solar System","destinationSystemId": "Alpha Centauri"}},
+    {"type": "TRAVEL_TO", "start": "Alpha Centauri", "end": "Sirius", "properties": {"travelTimeInHours": 4,"startSystemId": "Alpha Centauri","destinationSystemId": "Sirius"}},
+    {"type": "TRAVEL_TO", "start": "Sirius", "end": "Betelgeuse", "properties": {"travelTimeInHours": 8,"startSystemId": "Sirius","destinationSystemId": "Betelgeuse"}},
+    {"type": "TRAVEL_TO", "start": "Betelgeuse", "end": "Sirius", "properties": {"travelTimeInHours": 8,"startSystemId": "Betelgeuse","destinationSystemId": "Sirius"}},
+    {"type": "TRAVEL_TO", "start": "Solar System", "end": "Betelgeuse", "properties": {"travelTimeInHours": 5,"startSystemId": "Solar System","destinationSystemId": "Betelgeuse"}},
+    {"type": "TRAVEL_TO", "start": "Sirius", "end": "Vega", "properties": {"travelTimeInHours": 2,"startSystemId": "Sirius","destinationSystemId": "Vega"}},
+    {"type": "TRAVEL_TO", "start": "Vega", "end": "Alpha Centauri", "properties": {"travelTimeInHours": 3,"startSystemId": "Vega","destinationSystemId": "Alpha Centauri"}},
+    {"type": "TRAVEL_TO", "start": "Solar System", "end": "Vega", "properties": {"travelTimeInHours": 7,"startSystemId": "Solar System","destinationSystemId": "Vega"}},
+    {"type": "TRAVEL_TO", "start": "Betelgeuse", "end": "Vega", "properties": {"travelTimeInHours": 6,"startSystemId": "Betelgeuse","destinationSystemId": "Vega"}}
+  ]
+}
