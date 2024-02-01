@@ -26,7 +26,11 @@ public class StarSystemController {
         this.starSystemsRequestValidator = starSystemsRequestValidator;
         this.routesRequestValidator = routesRequestValidator;
     }
-
+    @GetMapping("/")
+    @ResponseBody
+    public ResponseEntity<?> hello(){
+        return ResponseEntity.ok("app is running");
+    }
     @PostMapping("/api/distance")
     @ResponseBody
     public ResponseEntity<?> getDistance(@RequestBody StarSystemsRequest request){
