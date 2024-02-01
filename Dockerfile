@@ -1,5 +1,5 @@
 # Use the official OpenJDK 17 base image
-FROM openjdk:17.0.2-jdk
+FROM openjdk:23-slim
 WORKDIR /app
 #RUN ./mvnw clean install
 # Copy the current directory contents into the container at /app
