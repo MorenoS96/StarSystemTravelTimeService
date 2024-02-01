@@ -38,7 +38,7 @@ cd StarSystemTravelTimeService
 
 mvnw clean install -DskipTests 
 
-**make sure no other service block the necessary ports** 
+**make sure no other service block the necessary ports: 8080,7474,7687** 
 
 docker-compose build
 
