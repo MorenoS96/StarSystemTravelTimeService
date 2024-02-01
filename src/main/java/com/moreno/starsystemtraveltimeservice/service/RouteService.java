@@ -54,7 +54,7 @@ public class RouteService {
         StarSystemEntity start=starSystemRepository.findById(startSystemId).orElse(null);
         StarSystemEntity end=starSystemRepository.findById(destSystemId).orElse(null);
         if(start==null || end==null){
-          return   new ArrayList<List<StarSystemEntity>>();
+          return new ArrayList<>();
         }
         return calculateRoutesWithMaxStops(start,end,maxStops).stream().filter(route->route.size()>1).toList();
     }
@@ -103,7 +103,7 @@ public class RouteService {
         StarSystemEntity start=starSystemRepository.findById(startSystemId).orElse(null);
         StarSystemEntity end=starSystemRepository.findById(destSystemId).orElse(null);
         if(start==null || end==null){
-            return new ArrayList<List<StarSystemEntity>>();
+            return new ArrayList<>();
         }
 
         return calculateRoutesWithMaxLengthDFS(start,end,exactStops+2).stream().filter(route->route.size()==exactStops+2).toList();
@@ -122,7 +122,7 @@ public class RouteService {
         StarSystemEntity start=starSystemRepository.findById(startSystemId).orElse(null);
         StarSystemEntity end=starSystemRepository.findById(destSystemId).orElse(null);
         if(start==null || end==null){
-          return new ArrayList<List<StarSystemEntity>>();
+          return new ArrayList<>();
         }
         return calculateRoutesWithMaxTraveltimeDFS(start,end,maxTravelTime).stream().filter(route->route.size()>1).distinct().toList();
 
