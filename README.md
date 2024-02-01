@@ -10,6 +10,8 @@ To run this App you need to do these steps:
   please follow the guide to install docker.
   
   install git-cli: [download here](https://cli.github.com/)
+
+  install java jdk17 or higher
   
 (make sure you can use docker cli and git cli, and that docker is running)
 ---
