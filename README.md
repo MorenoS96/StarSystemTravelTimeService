@@ -38,7 +38,7 @@ mvnw clean install -DskipTests
 
 **make sure no other service block the necessary ports** 
 
-docker-compose up -d
+docker-compose up 
 
 
 
