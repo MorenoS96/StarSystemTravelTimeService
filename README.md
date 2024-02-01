@@ -10,7 +10,7 @@ To run this App you need to do these steps:
   please follow the guide to install docker.
   
   install git-cli: [download here](https://cli.github.com/)
-
+  
 (make sure you can use docker cli and git cli, and that docker is running)
 ---
 execute inside a terminal:
@@ -36,7 +36,10 @@ cd StarSystemTravelTimeService
 
 mvnw clean install -DskipTests 
 
+**make sure no other service block the necessary ports** 
+
 docker-compose up -d
+
 
 
 **the application is now running at http://localhost:8080/**
