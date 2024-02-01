@@ -33,7 +33,7 @@ public class StarSystemController {
     }
     @PostMapping("/api/distance")
     @ResponseBody
-    public ResponseEntity<?> getDistance(@RequestBody StarSystemsRequest request){
+    public ResponseEntity<?> getDistance(@RequestBody StarSystemsRequestDTO request){
         starSystemsRequestValidator.validate(request);
         int distance=routeService.getDistance( request.getStarSystems());
         if(distance<0){
@@ -95,7 +95,7 @@ public class StarSystemController {
     @ExceptionHandler()
     @ResponseBody
     public ResponseEntity<?> exceptionHandler(Exception ex){
-        return ResponseEntity.badRequest().body("unexpected error");
+        return ResponseEntity.internalServerError().build();
     }
 
     private DurationResponseDTO convertToDurationResponseDTO(int number, String unit){

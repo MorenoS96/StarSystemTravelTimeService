@@ -4,7 +4,7 @@ package com.moreno.starsystemtraveltimeservice.controller.unittests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moreno.starsystemtraveltimeservice.controller.StarSystemController;
 import com.moreno.starsystemtraveltimeservice.model.dto.RoutesRequestDTO;
-import com.moreno.starsystemtraveltimeservice.model.dto.StarSystemsRequest;
+import com.moreno.starsystemtraveltimeservice.model.dto.StarSystemsRequestDTO;
 import com.moreno.starsystemtraveltimeservice.model.entity.StarSystemEntity;
 import com.moreno.starsystemtraveltimeservice.service.RouteService;
 import org.junit.jupiter.api.BeforeAll;
@@ -74,12 +74,12 @@ public class StarSystemControllerUnitTest {
         starSystemNames.add("Sirius");
         Mockito.when(this.routeService.getDistance(starSystemNames)).thenReturn(9);
         final String link = "/api/distance";
-        StarSystemsRequest starSystemsRequest=new StarSystemsRequest();
-        starSystemsRequest.setStarSystems(starSystemNames);
+        StarSystemsRequestDTO starSystemsRequestDTO =new StarSystemsRequestDTO();
+        starSystemsRequestDTO.setStarSystems(starSystemNames);
         mockMvc.perform(MockMvcRequestBuilders
                         .post(link)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(starSystemsRequest)).accept(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(starSystemsRequestDTO)).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.time").value(9));
 

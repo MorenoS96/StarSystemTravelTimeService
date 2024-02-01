@@ -11,7 +11,7 @@ import java.util.Objects;
 @RelationshipProperties
 public class TravelToRelationShip {
     @RelationshipId
-    private Long id;
+    private String id;
 
 
     private StarSystemEntity sourceSystem;
@@ -39,7 +39,7 @@ public class TravelToRelationShip {
         return destinationSystem;
     }
 
-    public TravelToRelationShip(int travelTime, String start, String end, Long identity) {
+    public TravelToRelationShip(int travelTime, String start, String end, String identity) {
         this.travelTimeInHours = travelTime;
         this.startSystemId = start;
         this.destinationSystemId = end;
@@ -49,7 +49,7 @@ public class TravelToRelationShip {
     public TravelToRelationShip() {
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -77,7 +77,7 @@ public class TravelToRelationShip {
         return travelTimeInHours;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

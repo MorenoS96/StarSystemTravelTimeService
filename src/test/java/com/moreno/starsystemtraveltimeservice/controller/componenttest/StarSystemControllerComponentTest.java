@@ -2,8 +2,7 @@ package com.moreno.starsystemtraveltimeservice.controller.componenttest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moreno.starsystemtraveltimeservice.model.dto.RoutesRequestDTO;
-import com.moreno.starsystemtraveltimeservice.model.dto.StarSystemsRequest;
-import com.moreno.starsystemtraveltimeservice.model.entity.StarSystemEntity;
+import com.moreno.starsystemtraveltimeservice.model.dto.StarSystemsRequestDTO;
 import com.moreno.starsystemtraveltimeservice.repository.StarSystemRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,8 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.Neo4jContainer;
-
-import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,19 +53,17 @@ public class StarSystemControllerComponentTest {
     }
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private StarSystemRepository starSystemRepository;
     ObjectMapper objectMapper=new ObjectMapper();
 
 
     @Test
     public void getDistanceComponentTest() throws Exception {
 
-        StarSystemsRequest starSystemsRequest=new StarSystemsRequest();
-        starSystemsRequest.addStarSystemName("Solar System");
-        starSystemsRequest.addStarSystemName("Alpha Centauri");
-        starSystemsRequest.addStarSystemName("Sirius");
-        String content=objectMapper.writeValueAsString(starSystemsRequest);
+        StarSystemsRequestDTO starSystemsRequestDTO =new StarSystemsRequestDTO();
+        starSystemsRequestDTO.addStarSystemName("Solar System");
+        starSystemsRequestDTO.addStarSystemName("Alpha Centauri");
+        starSystemsRequestDTO.addStarSystemName("Sirius");
+        String content=objectMapper.writeValueAsString(starSystemsRequestDTO);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/distance")

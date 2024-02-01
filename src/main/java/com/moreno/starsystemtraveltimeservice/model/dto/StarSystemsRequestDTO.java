@@ -3,19 +3,18 @@ package com.moreno.starsystemtraveltimeservice.model.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StarSystemsRequest {
+public class StarSystemsRequestDTO {
     private List<String> starSystems=new ArrayList<>();
 
 
-    public StarSystemsRequest() {
-        // Default constructor (no-args)
+    public StarSystemsRequestDTO() {
     }
     public void addStarSystemName(String starSystemSame){
         starSystems.add(starSystemSame);
     }
 
 
-    public StarSystemsRequest(List<String> starSystems) {
+    public StarSystemsRequestDTO(List<String> starSystems) {
         this.starSystems = starSystems;
     }
     public List<String> getStarSystems() {

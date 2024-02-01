@@ -161,7 +161,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/StarSystemsRequest'
+              $ref: '#/components/schemas/StarSystemsRequestDTO'
             example:
               starSystems:
               - Solar System
@@ -195,7 +195,7 @@ components:
         exactStops:
           type: integer
           format: int32
-    StarSystemsRequest:
+    StarSystemsRequestDTO:
       type: object
       properties:
         starSystems:
