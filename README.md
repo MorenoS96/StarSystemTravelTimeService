@@ -11,7 +11,7 @@ To run this App you need to do these steps:
   
   install git-cli: [download here](https://cli.github.com/)
 
-(make sure you can use docker cli and git cli)
+(make sure you can use docker cli and git cli, and that docker is running)
 ---
 execute inside a terminal:
 
@@ -33,6 +33,7 @@ git clone https://github.com/morenos96/StarSystemTravelTimeService.git
 cd StarSystemTravelTimeService
 
 (remove -DskipTests if you want to execute the tests)
+
 mvnw clean install -DskipTests 
 
 docker-compose up -d
