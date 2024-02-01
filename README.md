@@ -34,7 +34,7 @@ git clone https://github.com/morenos96/StarSystemTravelTimeService.git
 
 cd StarSystemTravelTimeService
 
-(remove -DskipTests if you want to execute the tests)
+(remove -DskipTests if you want to execute the tests - may take awhile)
 
 mvnw clean install -DskipTests 
 
@@ -44,6 +44,9 @@ docker-compose build
 
 docker-compose up 
 
+---
+
+wait a couple of seconds
 
 
 **the application is now running at http://localhost:8080/**
