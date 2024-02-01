@@ -1,6 +1,7 @@
 package com.moreno.starsystemtraveltimeservice.controller.componenttest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moreno.starsystemtraveltimeservice.model.dto.RoutesRequestDTO;
 import com.moreno.starsystemtraveltimeservice.model.dto.StarSystemsRequest;
 import com.moreno.starsystemtraveltimeservice.model.entity.StarSystemEntity;
 import com.moreno.starsystemtraveltimeservice.repository.StarSystemRepository;
@@ -62,8 +63,6 @@ public class StarSystemControllerComponentTest {
 
     @Test
     public void getDistanceComponentTest() throws Exception {
-        List<StarSystemEntity> all=starSystemRepository.findAll();
-        StarSystemEntity test =starSystemRepository.findById("Solar System").orElse(null);
 
         StarSystemsRequest starSystemsRequest=new StarSystemsRequest();
         starSystemsRequest.addStarSystemName("Solar System");
@@ -80,5 +79,21 @@ public class StarSystemControllerComponentTest {
 
     }
 
+    @Test
+    public void getShortestRouteComponentTest() throws Exception {
+
+        RoutesRequestDTO routesRequestDTO=new RoutesRequestDTO();
+        routesRequestDTO.setStartSystemName("Alpha Centauri");
+        routesRequestDTO.setDestinationSystemName("Alpha Centauri");
+        String content=objectMapper.writeValueAsString(routesRequestDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/shortest-route-duration")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.time").value(9));
+
+    }
 
 }

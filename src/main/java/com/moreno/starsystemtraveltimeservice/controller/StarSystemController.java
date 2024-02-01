@@ -2,6 +2,9 @@ package com.moreno.starsystemtraveltimeservice.controller;
 
 import com.moreno.starsystemtraveltimeservice.model.dto.*;
 import com.moreno.starsystemtraveltimeservice.model.entity.StarSystemEntity;
+import com.moreno.starsystemtraveltimeservice.model.validator.RoutesRequestValidator;
+import com.moreno.starsystemtraveltimeservice.model.validator.StarSystemsRequestValidator;
+import com.moreno.starsystemtraveltimeservice.model.validator.exception.RequestInvalidException;
 import com.moreno.starsystemtraveltimeservice.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,18 +17,20 @@ import java.util.List;
 @RestController
 public class StarSystemController {
     private final RouteService routeService;
+
+    private final StarSystemsRequestValidator starSystemsRequestValidator;
+    private final RoutesRequestValidator routesRequestValidator;
     @Autowired
-    public StarSystemController(RouteService routeService) {
+    public StarSystemController(RouteService routeService, StarSystemsRequestValidator starSystemsRequestValidator, RoutesRequestValidator routesRequestValidator) {
         this.routeService = routeService;
-    }
-    @GetMapping("/api/")
-    public String testConnection(){
-        return routeService.testConnection();
+        this.starSystemsRequestValidator = starSystemsRequestValidator;
+        this.routesRequestValidator = routesRequestValidator;
     }
 
     @PostMapping("/api/distance")
     @ResponseBody
     public ResponseEntity<?> getDistance(@RequestBody StarSystemsRequest request){
+        starSystemsRequestValidator.validate(request);
         int distance=routeService.getDistance( request.getStarSystems());
         if(distance<0){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NO SUCH ROUTE");
@@ -36,6 +41,7 @@ public class StarSystemController {
     @PostMapping("/api/maximum-stops-routes")
     @ResponseBody
     public ResponseEntity<?> getRoutesWithMaximumStops(@RequestBody RoutesRequestDTO routesRequestDTO){
+        routesRequestValidator.validate(routesRequestDTO,false,true,false);
        List<List<StarSystemEntity>> routes= routeService.getAllRoutesWithMaximumStops(routesRequestDTO.getStartSystemName(),routesRequestDTO.getDestinationSystemName(),routesRequestDTO.getMaxStops());
       if(routes.isEmpty()){
           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NO SUCH ROUTE");
@@ -46,7 +52,7 @@ public class StarSystemController {
     @PostMapping("/api/shortest-route-duration")
     @ResponseBody
     public ResponseEntity<?> getDurationOfShortestRoute(@RequestBody RoutesRequestDTO routesRequestDTO){
-
+        routesRequestValidator.validate(routesRequestDTO,false,false,false);
         int duration= routeService.getShortestRouteDuration(routesRequestDTO.getStartSystemName(),routesRequestDTO.getDestinationSystemName());
         if(duration<0){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NO SUCH ROUTE");
@@ -57,6 +63,7 @@ public class StarSystemController {
     @PostMapping("/api/exact-stops-routes")
     @ResponseBody
     public ResponseEntity<?> getRoutesWithExactStops(@RequestBody RoutesRequestDTO routesRequestDTO){
+        routesRequestValidator.validate(routesRequestDTO,false,false,true);
         List<List<StarSystemEntity>> routes= routeService.getAllRoutesWithExactStops(routesRequestDTO.getStartSystemName(),routesRequestDTO.getDestinationSystemName(), routesRequestDTO.getExactStops());
 
         if(routes.isEmpty()){
@@ -68,16 +75,23 @@ public class StarSystemController {
     @PostMapping("/api/maximum-travel-time-routes")
     @ResponseBody
     public ResponseEntity<?> getRoutesWithMaximumTravelTime(@RequestBody RoutesRequestDTO routesRequestDTO){
+        routesRequestValidator.validate(routesRequestDTO,true,false,false);
         List<List<StarSystemEntity>> routes=routeService.getAllRoutesWithMaximumTravelTime(routesRequestDTO.getStartSystemName(),routesRequestDTO.getDestinationSystemName(),routesRequestDTO.getMaxTravelTime());
         if(routes.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NO SUCH ROUTE");
         }
         return ResponseEntity.ok(convertToRouteResponseList(routes));
     }
-    @ExceptionHandler
+    @ExceptionHandler(RequestInvalidException.class)
+    @ResponseBody
+    public ResponseEntity<?> exceptionHandlerExpected(Exception ex){
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler()
     @ResponseBody
     public ResponseEntity<?> exceptionHandler(Exception ex){
-        return ResponseEntity.badRequest().body(ex.getClass().descriptorString());
+        return ResponseEntity.badRequest().body("unexpected error");
     }
 
     private DurationResponseDTO convertToDurationResponseDTO(int number, String unit){

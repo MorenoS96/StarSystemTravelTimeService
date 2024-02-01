@@ -1,0 +1,230 @@
+---
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /api/shortest-route-duration:
+    post:
+      tags:
+      - star-system-controller
+      description: returns the minimal time it takes to traverse form startSystem to destinationSystem.
+      operationId: getDurationOfShortestRoute
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutesRequestDTO'
+            example:
+              startSystemName: Sirius
+              destinationSystemName: Sirius
+        required: true
+      responses:
+        "404":
+          description: if no Route can found
+        "200":
+          description: A JSON indicating duration and time unit
+          content:
+            application/json':
+              schema:
+                $ref: '#/components/schemas/DurationResponseDTO'
+  /api/maximum-travel-time-routes:
+    post:
+      tags:
+      - star-system-controller
+      description: get all Routes between start and end that take at maximum maxTravelTime (edgeWeights)
+      operationId: getRoutesWithMaximumTravelTime
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutesRequestDTO'
+            example:
+              startSystemName: Sirius
+              destinationSystemName: Sirius
+              maxTravelTime: 30
+        required: true
+      responses:
+        "404":
+          description: if no Route can found
+        "200":
+          description: returns all Routes with maximal maxStops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RouteResponseDTO'
+              example:
+              - starSystemNames:
+                - Sirius
+                - Betelgeuse
+                - Sirius
+              - starSystemNames:
+                - Sirius
+                - Alpha Centauri
+                - Proxima Centauri
+                - Sirius
+  /api/maximum-stops-routes:
+    post:
+      tags:
+      - star-system-controller
+      description: returns all Routes with maximal maxStops
+      operationId: getRoutesWithMaximumStops
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutesRequestDTO'
+            example:
+              startSystemName: Sirius
+              destinationSystemName: Sirius
+              maxStops: 6
+        required: true
+      responses:
+        "404":
+          description: if no Route can found
+        "200":
+          description: returns all Routes with maximal maxStops and the amount of stops per Route
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RouteResponseStopsDTO'
+              example:
+              - starSystemNames:
+                - Sirius
+                - Betelgeuse
+                - Sirius
+                stops: 2
+              - starSystemNames:
+                - Sirius
+                - Alpha Centauri
+                - Proxima Centauri
+                - Sirius
+                stops: 3
+  /api/exact-stops-routes:
+    post:
+      tags:
+      - star-system-controller
+      description: returns all Routes with exactly exactStops between start and destination
+      operationId: getRoutesWithExactStops
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutesRequestDTO'
+            example:
+              startSystemName: Sirius
+              destinationSystemName: Sirius
+              exactStops: 3
+        required: true
+      responses:
+        "404":
+          description: if no Route can found
+        "200":
+          description: returns all Routes with exactly exactStops between start and destination
+          content:
+            application/json':
+              schema:
+                $ref: '#/components/schemas/RouteResponseDTO'
+              example:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/RouteResponseDTO'
+                example:
+                - starSystemNames:
+                  - Sirius
+                  - Betelgeuse
+                  - Alpha Centauri
+                  - Vega
+                  - Sirius
+                - starSystemNames:
+                  - Sirius
+                  - Alpha Centauri
+                  - Proxima Centauri
+                  - Solar System
+                  - Vega
+                  - Sirius
+  /api/distance:
+    post:
+      tags:
+      - star-system-controller
+      description: calculates the time it takes to traverse the given Route
+      operationId: getDistance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StarSystemsRequest'
+            example:
+              starSystems:
+              - Solar System
+              - Alpha Centauri
+              - Sirius
+        required: true
+      responses:
+        "404":
+          description: if no Route can found
+        "200":
+          description: A JSON indicating duration and time unit
+          content:
+            application/json':
+              schema:
+                $ref: '#/components/schemas/DurationResponseDTO'
+components:
+  schemas:
+    RoutesRequestDTO:
+      type: object
+      properties:
+        startSystemName:
+          type: string
+        destinationSystemName:
+          type: string
+        maxTravelTime:
+          type: integer
+          format: int32
+        maxStops:
+          type: integer
+          format: int32
+        exactStops:
+          type: integer
+          format: int32
+    StarSystemsRequest:
+      type: object
+      properties:
+        starSystems:
+          type: array
+          items:
+            type: string
+    RouteResponseDTO:
+      type: object
+      properties:
+        starSystemNames:
+          type: array
+          items:
+            type: string
+            example: "[\"Sirius\",\"Betelgeuse\",\"Sirius\"]"
+    DurationResponseDTO:
+      type: object
+      properties:
+        duration:
+          type: integer
+          format: int32
+          example: 9
+        unit:
+          type: string
+          example: hours
+    RouteResponseStopsDTO:
+      allOf:
+      - $ref: '#/components/schemas/RouteResponseDTO'
+      - type: object
+        properties:
+          stops:
+            type: integer
+            description: The number of stops in the route

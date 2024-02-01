@@ -183,18 +183,18 @@ public class RouteService {
         PriorityQueue<iPair> pq = new PriorityQueue<>();
         pq.add(new iPair(start, 0));
         List<StarSystemEntity> allStarSystems=starSystemRepository.findAll();
-        Map<StarSystemEntity,Integer> dist= new HashMap<>();
+        Map<String,Integer> dist= new HashMap<>();
 
         allStarSystems.forEach(starSystemEntity -> {
-            dist.put(starSystemEntity,Integer.MAX_VALUE);
+            dist.put(starSystemEntity.getName(),Integer.MAX_VALUE);
         });
 
-        dist.put(start,0);
+        dist.put(start.getName(),0);
         int distToEnd=0;
 
         while (!pq.isEmpty()) {
             StarSystemEntity u = pq.poll().vertex;
-             distToEnd=dist.get(end);
+             distToEnd=dist.get(end.getName());
             if (u.equals(end) && distToEnd>0) {
                 return distToEnd;
             }
@@ -204,10 +204,31 @@ public class RouteService {
                 int weight = travelToRelationShip.getTravelTimeInHours();
 
                 // Relaxation step
-                if (dist.get(v) > dist.get(u) + weight) {
-                    dist.put(v,dist.get(u) + weight);
-                    pq.add(new iPair(v, dist.get(v)));
+                if (dist.get(v.getName()) > dist.get(u.getName()) + weight) {
+                    dist.put(v.getName(),dist.get(u.getName()) + weight);
+                    pq.add(new iPair(v, dist.get(v.getName())));
                 }
+            }
+        }
+
+
+        if(start.getName().equals(end.getName())){
+            Map<String, Integer> lastChanceMap=new HashMap<>();
+            dist.entrySet().forEach(entry->{
+                String name=entry.getKey();
+                StarSystemEntity entity=starSystemRepository.findById(name).orElse(null);
+                if(entity!=null){
+                    List<TravelToRelationShip> travelToRelationShips=entity.getTravelTo();
+                  TravelToRelationShip travelTo=  travelToRelationShips.stream().filter(travelToRelationShip -> travelToRelationShip.getDestinationSystem().getName().equals(end.getName())).findAny().orElse(null);
+                if(travelTo!=null){
+                    lastChanceMap.put(name,entry.getValue()+travelTo.getTravelTimeInHours());
+                }
+                }
+
+            });
+            Integer distance=lastChanceMap.values().stream().filter(integer -> integer>0).sorted().findFirst().orElse(null);
+            if(distance!=null){
+                return distance;
             }
         }
 

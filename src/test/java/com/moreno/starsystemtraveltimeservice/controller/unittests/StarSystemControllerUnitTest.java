@@ -270,9 +270,19 @@ public class StarSystemControllerUnitTest {
                 .andExpect(jsonPath("$",hasSize(7)));
     }
     @Test
-    void exceptionTest() throws Exception {
+    void emptyExceptionTest() throws Exception {
         final String link="/api/maximum-travel-time-routes";
         mockMvc.perform(MockMvcRequestBuilders.post(link)
                 .contentType(MediaType.APPLICATION_JSON).content("{}")).andExpect(status().isBadRequest());
+    }
+    @Test
+    void invalidParameterTest() throws Exception {
+        final String link="/api/maximum-travel-time-routes";
+        RoutesRequestDTO routesRequestDTO=new RoutesRequestDTO();
+        routesRequestDTO.setStartSystemName(sirius);
+        routesRequestDTO.setDestinationSystemName(sirius);
+        routesRequestDTO.setMaxTravelTime(-1);
+        mockMvc.perform(MockMvcRequestBuilders.post(link)
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(routesRequestDTO))).andExpect(status().isBadRequest());
     }
 }
