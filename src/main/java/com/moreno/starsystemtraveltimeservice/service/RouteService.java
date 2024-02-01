@@ -188,10 +188,8 @@ public class RouteService {
         allStarSystems.forEach(starSystemEntity -> {
             dist.put(starSystemEntity.getName(),Integer.MAX_VALUE);
         });
-
         dist.put(start.getName(),0);
         int distToEnd=0;
-
         while (!pq.isEmpty()) {
             StarSystemEntity u = pq.poll().vertex;
              distToEnd=dist.get(end.getName());
@@ -200,10 +198,7 @@ public class RouteService {
             }
             for (TravelToRelationShip travelToRelationShip : u.getTravelTo()) {
                 StarSystemEntity v=travelToRelationShip.getDestinationSystem();
-
                 int weight = travelToRelationShip.getTravelTimeInHours();
-
-                // Relaxation step
                 if (dist.get(v.getName()) > dist.get(u.getName()) + weight) {
                     dist.put(v.getName(),dist.get(u.getName()) + weight);
                     pq.add(new iPair(v, dist.get(v.getName())));
