@@ -6,7 +6,7 @@ WORKDIR /app
 
 
 # Copy the compiled JAR file into the container at /app
-COPY target/StarSystemTravelTimeService-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY ./target/StarSystemTravelTimeService-0.0.1-SNAPSHOT.jar /app/app.jar
 
 # Expose the port that your Spring Boot application will run on
 EXPOSE 8080
