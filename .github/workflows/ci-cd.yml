@@ -23,8 +23,8 @@ jobs:
         run: |
           sudo apt-get install -y maven
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Build with Maven #skip tests so its faster, we test later
+        run: mvn clean install -DskipTests
 
       - name: Set up Docker Compose
         run: |
@@ -36,7 +36,7 @@ jobs:
       - name: Wait for services to be ready
         run: sleep 15  # Adjust as needed based on the time it takes for services to start.
 
-      - name: Run tests or any additional steps
+      - name: Run test
         run: mvn test
 
       - name: Stop and remove Docker Compose services
