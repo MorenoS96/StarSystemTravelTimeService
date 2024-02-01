@@ -4,13 +4,8 @@ FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+# Copy the executable jar file and the application.properties file to the container
+COPY target/StarSystemTravelTimeService-0.0.1-SNAPSHOT.jar /app/
 
-
-RUN chmod +x ./mvnw
-RUN ./mvnw dependency:go-offline
-
-RUN ./mvnw clean package
-COPY src ./src
-CMD ["./mvnw", "spring-boot:run"]
+# Set the command to run the Spring Boot application
+CMD ["java", "-jar", "StarSystemTravelTimeService-0.0.1-SNAPSHOT.jar"]
